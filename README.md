@@ -8,7 +8,7 @@
   <a href="https://developer.android.com"><img src="https://img.shields.io/badge/Platform-Android-3DDC84?style=flat-square&logo=android&logoColor=white" alt="Platform"></a>
   <a href="https://developer.android.com"><img src="https://img.shields.io/badge/Min%20SDK-24-3DDC84?style=flat-square&logo=android&logoColor=white" alt="Min SDK"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-yellow?style=flat-square" alt="License"></a>
-  <a href="https://jitpack.io/#tuhinx/httply"><img src="https://img.shields.io/badge/Version-1.0.3-blue?style=flat-square" alt="Version"></a>
+  <a href="https://jitpack.io/#tuhinx/httply"><img src="https://img.shields.io/badge/Version-1.0.4-blue?style=flat-square" alt="Version"></a>
   <a href="https://jitpack.io/#tuhinx/httply"><img src="https://img.shields.io/badge/JitPack-available-success?style=flat-square&logo=jitpack&logoColor=white" alt="JitPack"></a>
 </p>
 
@@ -127,7 +127,7 @@ dependencyResolutionManagement {
 
 ```groovy
 dependencies {
-    implementation 'com.github.tuhinx:httply:1.0.3'
+    implementation 'com.github.tuhinx:httply:1.0.4'
 }
 ```
 
@@ -150,7 +150,7 @@ dependencyResolutionManagement {
 
 ```kotlin
 dependencies {
-    implementation("com.github.tuhinx:httply:1.0.3")
+    implementation("com.github.tuhinx:httply:1.0.4")
 }
 ```
 
