@@ -186,12 +186,30 @@ The Retra API provides a clean, annotation-based approach for defining HTTP endp
 #### Step 1: Define an interface with annotated methods
 
 ```java
+// Define model classes for your API responses
+public class Post {
+    private int userId;
+    private int id;
+    private String title;
+    private String body;
+
+    // Getters
+    public int getUserId() { return userId; }
+    public int getId() { return id; }
+    public String getTitle() { return title; }
+    public String getBody() { return body; }
+}
+
+// Define your API interface
 public interface ApiService {
     @GET("users/{user}")
     Call<JSONObject> getUser(@Path("user") String user);
 
-    @GET("search/repositories")
-    Call<HttpResponse> searchRepos(@Query("q") String query);
+    @GET("posts")
+    Call<List<Post>> getPosts();
+
+    @GET("posts/{id}")
+    Call<Post> getPost(@Path("id") int id);
 
     @POST("users/{user}/repos")
     Call<JSONObject> createRepo(@Path("user") String user, @Body JSONObject body);
@@ -201,37 +219,52 @@ public interface ApiService {
 #### Step 2: Create a service factory and use the interface
 
 ```java
-// Create a service factory
-ServiceFactory factory = Httply.newServiceFactory()
+// Create a Retra instance using the builder pattern
+Retra retra = new Retra.Builder()
         .baseUrl("https://api.example.com/")
+        .addConverterFactory(JsonConverterFactory.create())
         .build();
 
 // Create an implementation of the API interface
-ApiService api = factory.create(ApiService.class);
+ApiService api = retra.create(ApiService.class);
 
-// Make requests
+// Synchronous requests
 try {
+    // Get a list of posts
+    List<Post> posts = api.getPosts().execute();
+    for (Post post : posts) {
+        System.out.println("Post: " + post.getTitle());
+    }
+
+    // Get a specific post
+    Post post = api.getPost(1).execute();
+    System.out.println("Post #1: " + post.getTitle());
+
     // Get a user by username
     JSONObject user = api.getUser("username").execute();
     System.out.println("User: " + user.getString("name"));
-
-    // Search repositories with a query parameter
-    HttpResponse response = api.searchRepos("android").execute();
-    if (response.isSuccessful()) {
-        JSONObject result = new JSONObject(response.body().string());
-        System.out.println("Total count: " + result.getInt("total_count"));
-    }
-
-    // Create a new repository
-    JSONObject repoData = new JSONObject();
-    repoData.put("name", "new-repo");
-    repoData.put("description", "A new repository");
-
-    JSONObject newRepo = api.createRepo("username", repoData).execute();
-    System.out.println("Created repo: " + newRepo.getString("html_url"));
 } catch (Exception e) {
     e.printStackTrace();
 }
+
+// Asynchronous requests with callbacks
+Call<List<Post>> call = api.getPosts();
+call.enqueue(new Callback<List<Post>>() {
+    @Override
+    public void onResponse(Call<List<Post>> call, Response<List<Post>> response) {
+        if (response.isSuccessful()) {
+            List<Post> posts = response.body();
+            for (Post post : posts) {
+                System.out.println("Title: " + post.getTitle());
+            }
+        }
+    }
+
+    @Override
+    public void onFailure(Call<List<Post>> call, Throwable t) {
+        System.err.println("Error: " + t.getMessage());
+    }
+});
 ```
 
 ### 🔄 Voltra API
@@ -482,14 +515,15 @@ HttpClient client = Httply.newHttpClient()
 <td>
 
 ```java
-// Configure a ServiceFactory with the custom client
-ServiceFactory factory = Httply.newServiceFactory()
+// Configure a Retra instance with the custom client
+Retra retra = new Retra.Builder()
         .baseUrl("https://api.example.com/")
         .client(client)
+        .addConverterFactory(JsonConverterFactory.create())
         .build();
 
-// Use the factory to create API interfaces
-ApiService api = factory.create(ApiService.class);
+// Use Retra to create API interfaces
+ApiService api = retra.create(ApiService.class);
 ```
 
 </td>

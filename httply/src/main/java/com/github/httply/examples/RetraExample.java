@@ -6,7 +6,8 @@ import android.util.Log;
 import com.github.httply.Httply;
 import com.github.httply.core.HttpResponse;
 import com.github.httply.retra.Call;
-import com.github.httply.retra.ServiceFactory;
+import com.github.httply.retra.JsonConverterFactory;
+import com.github.httply.retra.Retra;
 import com.github.httply.retra.annotations.GET;
 import com.github.httply.retra.annotations.Path;
 import com.github.httply.retra.annotations.Query;
@@ -42,13 +43,14 @@ public class RetraExample {
      * Example usage.
      */
     public void example() {
-        // Create a service factory
-        ServiceFactory factory = Httply.newServiceFactory()
+        // Create a Retra instance using the builder pattern
+        Retra retra = new Retra.Builder()
                 .baseUrl("https://api.github.com/")
+                .addConverterFactory(JsonConverterFactory.create())
                 .build();
 
         // Create a service instance
-        GitHubApi api = factory.create(GitHubApi.class);
+        GitHubApi api = retra.create(GitHubApi.class);
 
         // Use an executor for background operations
         ExecutorService executor = Executors.newSingleThreadExecutor();

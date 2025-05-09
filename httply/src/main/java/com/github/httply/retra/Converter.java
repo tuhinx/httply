@@ -3,6 +3,7 @@ package com.github.httply.retra;
 import com.github.httply.core.HttpRequest;
 import com.github.httply.core.HttpResponse;
 
+import java.io.IOException;
 import java.lang.reflect.Type;
 
 /**
@@ -24,6 +25,17 @@ public interface Converter {
      * @param response the response to convert
      * @param type     the type to convert to
      * @return the converted object
+     * @throws IOException if an I/O error occurs
      */
-    Object fromResponse(HttpResponse response, Type type);
+    Object fromResponse(HttpResponse response, Type type) throws IOException;
+
+    /**
+     * Creates {@link Converter} instances based on a type and target usage.
+     */
+    abstract class Factory {
+        /**
+         * Create a converter for serialization and deserialization.
+         */
+        public abstract Converter createConverter();
+    }
 }
