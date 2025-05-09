@@ -107,15 +107,75 @@ public class JsonArrayRequest extends Request<JSONArray> {
      * @param listener      the listener to receive the response
      * @param errorListener the listener to receive errors
      */
+    /**
+     * Creates a new request with the given method constant and JSON body.
+     * This constructor matches the example usage pattern with anonymous inner
+     * classes.
+     *
+     * @param method        the HTTP method constant from {@link Request.Method}
+     * @param url           the URL to fetch
+     * @param jsonRequest   the JSON body to send (can be null for GET requests)
+     * @param listener      the listener to receive the response
+     * @param errorListener the listener to receive errors
+     */
     public JsonArrayRequest(int method, String url, JSONArray jsonRequest,
-            JsonObjectRequest.Response.Listener<JSONArray> listener,
-            JsonObjectRequest.Response.ErrorListener errorListener) {
+            Response.Listener<JSONArray> listener,
+            Response.ErrorListener errorListener) {
         super(Method.toHttpMethod(method), url,
                 jsonRequest != null ? jsonRequest.toString() : null,
                 jsonRequest != null ? HttpHeader.Values.APPLICATION_JSON : null,
                 response -> listener.onResponse(response),
                 error -> errorListener.onErrorResponse(error));
     }
+
+    /**
+     * Creates a new request with the given method constant and JSON body.
+     * This constructor matches the example usage pattern with anonymous inner
+     * classes.
+     *
+     * Example usage:
+     *
+     * <pre>
+     * String url = "https://api.example.com/foods";
+     *
+     * JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(
+     *         Request.Method.GET,
+     *         url,
+     *         null,
+     *         new Response.Listener<JSONArray>() {
+     *             &#64;Override
+     *             public void onResponse(JSONArray response) {
+     *                 try {
+     *                     for (int i = 0; i < response.length(); i++) {
+     *                         JSONObject item = response.getJSONObject(i);
+     *                         String name = item.getString("name");
+     *                         double price = item.getDouble("price");
+     *
+     *                         Toast.makeText(context,
+     *                                 (i + 1) + ". " + name + " - $" + price,
+     *                                 Toast.LENGTH_SHORT).show();
+     *                     }
+     *                 } catch (JSONException e) {
+     *                     e.printStackTrace();
+     *                 }
+     *             }
+     *         },
+     *         new Response.ErrorListener() {
+     *             @Override
+     *             public void onErrorResponse(VoltraError error) {
+     *                 error.printStackTrace();
+     *                 Toast.makeText(context, "Error loading array", Toast.LENGTH_SHORT).show();
+     *             }
+     *         });
+     * requestQueue.add(jsonArrayRequest);
+     * </pre>
+     *
+     * @param method        the HTTP method constant from {@link Request.Method}
+     * @param url           the URL to fetch
+     * @param jsonRequest   the JSON body to send (can be null for GET requests)
+     * @param listener      the listener to receive the response
+     * @param errorListener the listener to receive errors
+     */
 
     @Override
     public JSONArray parseResponse(HttpResponse response) {

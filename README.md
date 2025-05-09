@@ -243,7 +243,7 @@ RequestQueue queue = Httply.newRequestQueue(context);
 <summary><b>📊 JsonObjectRequest Example</b></summary>
 
 ```java
-// GET request for a JSON object
+// GET request for a JSON object (lambda style)
 String url = "https://mocki.io/v1/861a8605-a6e0-408d-8feb-ab303b15f59f";
 JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
         Request.Method.GET,
@@ -271,13 +271,48 @@ JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
 queue.add(jsonObjectRequest);
 ```
 
+```java
+// GET request for a JSON object (anonymous inner class style)
+String url = "https://api.example.com/food";
+JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+        Request.Method.GET,
+        url,
+        null,
+        new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    int id = response.getInt("id");
+                    String name = response.getString("name");
+                    String category = response.getString("category");
+                    double price = response.getDouble("price");
+
+                    Toast.makeText(context,
+                            name + " (" + category + ") - $" + price,
+                            Toast.LENGTH_SHORT).show();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        },
+        new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VoltraError error) {
+                error.printStackTrace();
+                Toast.makeText(context, "Error loading object", Toast.LENGTH_SHORT).show();
+            }
+        }
+);
+requestQueue.add(jsonObjectRequest);
+```
+
 </details>
 
 <details open>
 <summary><b>📋 JsonArrayRequest Example</b></summary>
 
 ```java
-// GET request for a JSON array
+// GET request for a JSON array (lambda style)
 String urlArray = "https://mocki.io/v1/861a8605-a6e0-408d-8feb-ab303b15f59f";
 JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(
         Request.Method.GET,
@@ -310,13 +345,50 @@ JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(
 queue.add(jsonArrayRequest);
 ```
 
+```java
+// GET request for a JSON array (anonymous inner class style)
+String url = "https://api.example.com/foods";
+JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(
+        Request.Method.GET,
+        url,
+        null,
+        new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+                try {
+                    for (int i = 0; i < response.length(); i++) {
+                        JSONObject item = response.getJSONObject(i);
+                        String name = item.getString("name");
+                        double price = item.getDouble("price");
+
+                        int finalI = i;
+                        Toast.makeText(context,
+                                (finalI + 1) + ". " + name + " - $" + price,
+                                Toast.LENGTH_SHORT).show();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        },
+        new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VoltraError error) {
+                error.printStackTrace();
+                Toast.makeText(context, "Error loading array", Toast.LENGTH_SHORT).show();
+            }
+        }
+);
+requestQueue.add(jsonArrayRequest);
+```
+
 </details>
 
 <details open>
 <summary><b>📝 StringRequest Example</b></summary>
 
 ```java
-// GET request for a string response
+// GET request for a string response (lambda style)
 String url = "https://mocki.io/v1/861a8605-a6e0-408d-8feb-ab303b15f59f";
 StringRequest stringRequest = new StringRequest(
         Request.Method.GET,
@@ -346,6 +418,30 @@ StringRequest stringRequest = new StringRequest(
 
 // Add the request to the queue to execute it
 queue.add(stringRequest);
+```
+
+```java
+// GET request for a string response (anonymous inner class style)
+String url = "https://api.example.com/message";
+
+StringRequest stringRequest = new StringRequest(
+        Request.Method.GET,
+        url,
+        new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Toast.makeText(context, "Response: " + response, Toast.LENGTH_SHORT).show();
+            }
+        },
+        new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VoltraError error) {
+                error.printStackTrace();
+                Toast.makeText(context, "Error fetching string", Toast.LENGTH_SHORT).show();
+            }
+        }
+);
+requestQueue.add(stringRequest);
 ```
 
 </details>

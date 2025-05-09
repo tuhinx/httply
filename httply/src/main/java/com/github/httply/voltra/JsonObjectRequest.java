@@ -72,6 +72,26 @@ public class JsonObjectRequest extends Request<JSONObject> {
 
     /**
      * Creates a new request with the given method constant and JSON body.
+     * This constructor matches the example usage pattern with anonymous inner
+     * classes.
+     *
+     * @param method        the HTTP method constant from {@link Request.Method}
+     * @param url           the URL to fetch
+     * @param jsonRequest   the JSON body to send (can be null for GET requests)
+     * @param listener      the listener to receive the response
+     * @param errorListener the listener to receive errors
+     */
+    public JsonObjectRequest(int method, String url, JSONObject jsonRequest,
+            Response.Listener<JSONObject> listener, Response.ErrorListener errorListener) {
+        super(Method.toHttpMethod(method), url,
+                jsonRequest != null ? jsonRequest.toString() : null,
+                jsonRequest != null ? HttpHeader.Values.APPLICATION_JSON : null,
+                response -> listener.onResponse(response),
+                error -> errorListener.onErrorResponse(error));
+    }
+
+    /**
+     * Creates a new request with the given method constant and JSON body.
      * This constructor matches the example usage pattern.
      *
      * Example usage:
@@ -105,39 +125,54 @@ public class JsonObjectRequest extends Request<JSONObject> {
      * @param listener      the listener to receive the response
      * @param errorListener the listener to receive errors
      */
-    public JsonObjectRequest(int method, String url, JSONObject jsonRequest,
-            Response.Listener<JSONObject> listener, Response.ErrorListener errorListener) {
-        super(Method.toHttpMethod(method), url,
-                jsonRequest != null ? jsonRequest.toString() : null,
-                jsonRequest != null ? HttpHeader.Values.APPLICATION_JSON : null,
-                response -> listener.onResponse(response),
-                error -> errorListener.onErrorResponse(error));
-    }
 
     /**
-     * Response listener interface for compatibility with example usage pattern.
+     * Creates a new request with the given method constant and JSON body.
+     * This constructor matches the example usage pattern with anonymous inner
+     * classes.
+     *
+     * Example usage:
+     *
+     * <pre>
+     * String url = "https://api.example.com/food";
+     *
+     * JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+     *         Request.Method.GET,
+     *         url,
+     *         null,
+     *         new Response.Listener<JSONObject>() {
+     *             &#64;Override
+     *             public void onResponse(JSONObject response) {
+     *                 try {
+     *                     int id = response.getInt("id");
+     *                     String name = response.getString("name");
+     *                     String category = response.getString("category");
+     *                     double price = response.getDouble("price");
+     *
+     *                     Toast.makeText(context,
+     *                             name + " (" + category + ") - $" + price,
+     *                             Toast.LENGTH_SHORT).show();
+     *                 } catch (JSONException e) {
+     *                     e.printStackTrace();
+     *                 }
+     *             }
+     *         },
+     *         new Response.ErrorListener() {
+     *             @Override
+     *             public void onErrorResponse(VoltraError error) {
+     *                 error.printStackTrace();
+     *                 Toast.makeText(context, "Error loading object", Toast.LENGTH_SHORT).show();
+     *             }
+     *         });
+     * requestQueue.add(jsonObjectRequest);
+     * </pre>
+     *
+     * @param method        the HTTP method constant from {@link Request.Method}
+     * @param url           the URL to fetch
+     * @param jsonRequest   the JSON body to send (can be null for GET requests)
+     * @param listener      the listener to receive the response
+     * @param errorListener the listener to receive errors
      */
-    public static class Response {
-        /**
-         * Listener interface for receiving the response.
-         */
-        public interface Listener<T> {
-            /**
-             * Called when a response is received.
-             */
-            void onResponse(T response);
-        }
-
-        /**
-         * Listener interface for receiving errors.
-         */
-        public interface ErrorListener {
-            /**
-             * Called when an error is received.
-             */
-            void onErrorResponse(VoltraError error);
-        }
-    }
 
     @Override
     public JSONObject parseResponse(HttpResponse response) {
