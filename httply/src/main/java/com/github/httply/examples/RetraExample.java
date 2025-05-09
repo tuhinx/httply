@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.github.httply.Httply;
 import com.github.httply.core.HttpResponse;
+import com.github.httply.retra.Call;
 import com.github.httply.retra.ServiceFactory;
 import com.github.httply.retra.annotations.GET;
 import com.github.httply.retra.annotations.Path;
@@ -28,13 +29,13 @@ public class RetraExample {
      */
     public interface GitHubApi {
         @GET("users/{user}")
-        JSONObject getUser(@Path("user") String user);
+        Call<JSONObject> getUser(@Path("user") String user);
 
         @GET("users/{user}/repos")
-        JSONArray listRepos(@Path("user") String user);
+        Call<JSONArray> listRepos(@Path("user") String user);
 
         @GET("search/repositories")
-        HttpResponse searchRepos(@Query("q") String query);
+        Call<HttpResponse> searchRepos(@Query("q") String query);
     }
 
     /**
@@ -54,13 +55,13 @@ public class RetraExample {
         executor.execute(() -> {
             try {
                 // Make API calls
-                JSONObject user = api.getUser("octocat");
+                JSONObject user = api.getUser("octocat").execute();
                 Log.d("RetraExample", "User: " + user.toString());
 
-                JSONArray repos = api.listRepos("octocat");
+                JSONArray repos = api.listRepos("octocat").execute();
                 Log.d("RetraExample", "Repos: " + repos.toString());
 
-                HttpResponse response = api.searchRepos("android");
+                HttpResponse response = api.searchRepos("android").execute();
                 Log.d("RetraExample", "Search: " + response.body().string());
             } catch (Exception e) {
                 Log.e("RetraExample", "Error in API call", e);

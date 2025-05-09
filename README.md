@@ -8,7 +8,7 @@
   <a href="https://developer.android.com"><img src="https://img.shields.io/badge/Platform-Android-3DDC84?style=flat-square&logo=android&logoColor=white" alt="Platform"></a>
   <a href="https://developer.android.com"><img src="https://img.shields.io/badge/Min%20SDK-24-3DDC84?style=flat-square&logo=android&logoColor=white" alt="Min SDK"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-yellow?style=flat-square" alt="License"></a>
-  <a href="https://jitpack.io/#tuhinx/httply"><img src="https://img.shields.io/badge/Version-1.0.0-blue?style=flat-square" alt="Version"></a>
+  <a href="https://jitpack.io/#tuhinx/httply"><img src="https://img.shields.io/badge/Version-1.0.3-blue?style=flat-square" alt="Version"></a>
   <a href="https://jitpack.io/#tuhinx/httply"><img src="https://img.shields.io/badge/JitPack-available-success?style=flat-square&logo=jitpack&logoColor=white" alt="JitPack"></a>
 </p>
 
@@ -127,7 +127,7 @@ dependencyResolutionManagement {
 
 ```groovy
 dependencies {
-    implementation 'com.github.tuhinx:httply:1.0.0'
+    implementation 'com.github.tuhinx:httply:1.0.3'
 }
 ```
 
@@ -150,7 +150,7 @@ dependencyResolutionManagement {
 
 ```kotlin
 dependencies {
-    implementation("com.github.tuhinx:httply:1.0.0")
+    implementation("com.github.tuhinx:httply:1.0.3")
 }
 ```
 
@@ -188,13 +188,13 @@ The Retra API provides a clean, annotation-based approach for defining HTTP endp
 ```java
 public interface ApiService {
     @GET("users/{user}")
-    JSONObject getUser(@Path("user") String user);
+    Call<JSONObject> getUser(@Path("user") String user);
 
     @GET("search/repositories")
-    HttpResponse searchRepos(@Query("q") String query);
+    Call<HttpResponse> searchRepos(@Query("q") String query);
 
     @POST("users/{user}/repos")
-    JSONObject createRepo(@Path("user") String user, @Body JSONObject body);
+    Call<JSONObject> createRepo(@Path("user") String user, @Body JSONObject body);
 }
 ```
 
@@ -212,15 +212,23 @@ ApiService api = factory.create(ApiService.class);
 // Make requests
 try {
     // Get a user by username
-    JSONObject user = api.getUser("username");
+    JSONObject user = api.getUser("username").execute();
     System.out.println("User: " + user.getString("name"));
 
     // Search repositories with a query parameter
-    HttpResponse response = api.searchRepos("android");
+    HttpResponse response = api.searchRepos("android").execute();
     if (response.isSuccessful()) {
         JSONObject result = new JSONObject(response.body().string());
         System.out.println("Total count: " + result.getInt("total_count"));
     }
+
+    // Create a new repository
+    JSONObject repoData = new JSONObject();
+    repoData.put("name", "new-repo");
+    repoData.put("description", "A new repository");
+
+    JSONObject newRepo = api.createRepo("username", repoData).execute();
+    System.out.println("Created repo: " + newRepo.getString("html_url"));
 } catch (Exception e) {
     e.printStackTrace();
 }

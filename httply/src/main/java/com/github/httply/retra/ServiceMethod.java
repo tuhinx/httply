@@ -23,6 +23,7 @@ import com.github.httply.retra.annotations.Query;
 import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
+import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,8 +32,10 @@ import java.util.regex.Pattern;
 
 /**
  * Represents a method in a service interface.
+ *
+ * @param <T> The return type of the method.
  */
-public class ServiceMethod {
+public class ServiceMethod<T> {
     private static final String TAG = "ServiceMethod";
     private static final Pattern PATH_PARAM_PATTERN = Pattern.compile("\\{([^/]+?)\\}");
 
@@ -59,20 +62,34 @@ public class ServiceMethod {
     }
 
     /**
-     * Executes the service method with the given arguments.
+     * Creates a Call object for the service method with the given arguments.
      */
-    public Object invoke(Object[] args) throws IOException {
+    public Call<T> invoke(Object[] args) {
+        return new OkHttpCall<>(this, args);
+    }
+
+    /**
+     * Executes the service method with the given arguments and returns the HTTP
+     * response.
+     */
+    public HttpResponse toResponse(Object[] args) throws IOException {
         // Build the request
         HttpRequest request = buildRequest(args);
 
         // Execute the request
-        HttpResponse response = client.execute(request);
+        return client.execute(request);
+    }
 
+    /**
+     * Parses the HTTP response into the expected return type.
+     */
+    @SuppressWarnings("unchecked")
+    public T parseResponse(HttpResponse response) throws IOException {
         // Convert the response
         if (responseType == HttpResponse.class) {
-            return response;
+            return (T) response;
         } else {
-            return converter.fromResponse(response, responseType);
+            return (T) converter.fromResponse(response, responseType);
         }
     }
 
@@ -197,7 +214,7 @@ public class ServiceMethod {
     /**
      * Builder for {@link ServiceMethod}.
      */
-    public static final class Builder {
+    public static final class Builder<T> {
         private final HttpClient client;
         private final Method method;
         private final Annotation[] methodAnnotations;
@@ -219,7 +236,22 @@ public class ServiceMethod {
             this.parameterAnnotationsArray = method.getParameterAnnotations();
             this.parameterTypes = method.getGenericParameterTypes();
             this.converter = converter;
-            this.responseType = method.getGenericReturnType();
+
+            // Extract the response type from the Call<T> return type
+            Type returnType = method.getGenericReturnType();
+            if (!(returnType instanceof ParameterizedType)) {
+                throw new IllegalArgumentException(
+                        "Return type must be parameterized as Call<Foo> or Call<? extends Foo>");
+            }
+
+            Type rawReturnType = ((ParameterizedType) returnType).getRawType();
+            if (rawReturnType != Call.class) {
+                throw new IllegalArgumentException(
+                        "Return type must be Call<T>, found: " + returnType);
+            }
+
+            Type callResponseType = ((ParameterizedType) returnType).getActualTypeArguments()[0];
+            this.responseType = callResponseType;
         }
 
         /**
@@ -233,7 +265,8 @@ public class ServiceMethod {
         /**
          * Builds a new {@link ServiceMethod}.
          */
-        public ServiceMethod build() {
+        @SuppressWarnings("unchecked")
+        public ServiceMethod<T> build() {
             // Parse method annotations
             for (Annotation annotation : methodAnnotations) {
                 parseMethodAnnotation(annotation);
@@ -269,7 +302,7 @@ public class ServiceMethod {
                 parameterHandlers.add(handler);
             }
 
-            return new ServiceMethod(this);
+            return (ServiceMethod<T>) new ServiceMethod<>(this);
         }
 
         /**

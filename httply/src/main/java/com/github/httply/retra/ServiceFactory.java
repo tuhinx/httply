@@ -16,7 +16,7 @@ public final class ServiceFactory {
     private final HttpClient client;
     private final HttpUrl baseUrl;
     private final Converter converter;
-    private final Map<Method, ServiceMethod> serviceMethodCache = new ConcurrentHashMap<>();
+    private final Map<Method, ServiceMethod<?>> serviceMethodCache = new ConcurrentHashMap<>();
 
     private ServiceFactory(Builder builder) {
         this.client = builder.client;
@@ -66,8 +66,9 @@ public final class ServiceFactory {
     /**
      * Loads or creates a ServiceMethod for the given method.
      */
-    private ServiceMethod loadServiceMethod(Method method) {
-        ServiceMethod result = serviceMethodCache.get(method);
+    @SuppressWarnings("unchecked")
+    private ServiceMethod<?> loadServiceMethod(Method method) {
+        ServiceMethod<?> result = serviceMethodCache.get(method);
         if (result != null) {
             return result;
         }
@@ -75,7 +76,7 @@ public final class ServiceFactory {
         synchronized (serviceMethodCache) {
             result = serviceMethodCache.get(method);
             if (result == null) {
-                ServiceMethod.Builder builder = new ServiceMethod.Builder(client, method, converter);
+                ServiceMethod.Builder<?> builder = new ServiceMethod.Builder<>(client, method, converter);
                 builder.baseUrl(baseUrl);
                 result = builder.build();
                 serviceMethodCache.put(method, result);
