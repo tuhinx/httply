@@ -28,11 +28,11 @@ public class VoltraExample {
         // Create a request queue
         RequestQueue queue = Httply.newRequestQueue(context);
 
-
-
-        /**========================================================
-               * Make a JSON object request (original style) *
-         ==========================================================*/
+        /**
+         * ========================================================
+         * Make a JSON object request (original style) *
+         * ==========================================================
+         */
 
         String userUrl = "https://api.github.com/users/octocat";
         JsonObjectRequest userRequest = new JsonObjectRequest(userUrl,
@@ -48,12 +48,11 @@ public class VoltraExample {
         // Add the request to the queue
         queue.add(userRequest);
 
-
-
-        /**=====================================================================================
-                  * Make a JSON object request (new style with Method constant and lambda) *
-         =======================================================================================*/
-
+        /**
+         * =====================================================================================
+         * Make a JSON object request (new style with Method constant and lambda) *
+         * =======================================================================================
+         */
 
         String userUrl2 = "https://mocki.io/v1/861a8605-a6e0-408d-8feb-ab303b15f59f";
         JsonObjectRequest userRequest2 = new JsonObjectRequest(
@@ -75,13 +74,11 @@ public class VoltraExample {
                     error.printStackTrace();
                 });
 
-
-
-
-        /**=====================================================================================
-                * Make a JSON object request (new style with Method constant and anonymous *
-         =======================================================================================*/
-
+        /**
+         * =====================================================================================
+         * Make a JSON object request (new style with Method constant and anonymous *
+         * =======================================================================================
+         */
 
         // inner classes)
         String foodUrl = "https://mocki.io/v1/861a8605-a6e0-408d-8feb-ab303b15f59f";
@@ -112,11 +109,11 @@ public class VoltraExample {
         queue.add(userRequest2);
         queue.add(foodRequest);
 
-
-
-        /**========================================================
-               * Make a JSON array request (original style) *
-         ==========================================================*/
+        /**
+         * ========================================================
+         * Make a JSON array request (original style) *
+         * ==========================================================
+         */
 
         String reposUrl = "https://api.github.com/users/octocat/repos";
         JsonArrayRequest reposRequest = new JsonArrayRequest(reposUrl,
@@ -132,11 +129,11 @@ public class VoltraExample {
         // Add the request to the queue
         queue.add(reposRequest);
 
-
-
-        /**=====================================================================================
-                  * Make a JSON array request (new style with Method constant and lambda) *
-         =======================================================================================*/
+        /**
+         * =====================================================================================
+         * Make a JSON array request (new style with Method constant and lambda) *
+         * =======================================================================================
+         */
 
         String foodsUrl = "https://mocki.io/v1/861a8605-a6e0-408d-8feb-ab303b15f59f";
         JsonArrayRequest foodsRequest = new JsonArrayRequest(
@@ -161,13 +158,12 @@ public class VoltraExample {
                     error.printStackTrace();
                 });
 
-
-
-
-
-        /**=========================================================================================
-                  * Make a JSON array request (new style with Method constant and anonymous inner *
-         ==========================================================================================*/
+        /**
+         * =========================================================================================
+         * Make a JSON array request (new style with Method constant and anonymous inner
+         * *
+         * ==========================================================================================
+         */
 
         // classes)
         String itemsUrl = "https://mocki.io/v1/861a8605-a6e0-408d-8feb-ab303b15f59f";
@@ -201,13 +197,11 @@ public class VoltraExample {
         queue.add(foodsRequest);
         queue.add(itemsRequest);
 
-
-
-
-
-        /**========================================================
-               * Make a string request (original style) *
-         ==========================================================*/
+        /**
+         * ========================================================
+         * Make a string request (original style) *
+         * ==========================================================
+         */
 
         String searchUrl = "https://api.github.com/search/repositories?q=android";
         StringRequest searchRequest = new StringRequest(searchUrl,
@@ -223,12 +217,11 @@ public class VoltraExample {
         // Add the request to the queue
         queue.add(searchRequest);
 
-
-
-
-        /**=====================================================================================
-                  * Make a string request (new style with Method constant and lambda) *
-         =======================================================================================*/
+        /**
+         * =====================================================================================
+         * Make a string request (new style with Method constant and lambda) *
+         * =======================================================================================
+         */
 
         String dataUrl = "https://mocki.io/v1/861a8605-a6e0-408d-8feb-ab303b15f59f";
         StringRequest dataRequest = new StringRequest(
@@ -248,12 +241,11 @@ public class VoltraExample {
         // Add the request to the queue
         queue.add(dataRequest);
 
-
-
-
-        /**=====================================================================================
-                  * Make a string request (new style with Method constant and anonymous inner *
-         =======================================================================================*/
+        /**
+         * =====================================================================================
+         * Make a string request (new style with Method constant and anonymous inner *
+         * =======================================================================================
+         */
 
         // classes)
         String messageUrl = "https://mocki.io/v1/861a8605-a6e0-408d-8feb-ab303b15f59f";
