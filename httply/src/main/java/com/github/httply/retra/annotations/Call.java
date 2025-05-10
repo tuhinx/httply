@@ -1,4 +1,4 @@
-package com.github.httply.retra;
+package com.github.httply.retra.annotations;
 
 import java.io.IOException;
 

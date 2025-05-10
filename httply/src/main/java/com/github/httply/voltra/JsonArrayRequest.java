@@ -119,8 +119,8 @@ public class JsonArrayRequest extends Request<JSONArray> {
      * @param errorListener the listener to receive errors
      */
     public JsonArrayRequest(int method, String url, JSONArray jsonRequest,
-            Response.Listener<JSONArray> listener,
-            Response.ErrorListener errorListener) {
+            VoltraResponse.Listener<JSONArray> listener,
+            VoltraResponse.ErrorListener errorListener) {
         super(Method.toHttpMethod(method), url,
                 jsonRequest != null ? jsonRequest.toString() : null,
                 jsonRequest != null ? HttpHeader.Values.APPLICATION_JSON : null,

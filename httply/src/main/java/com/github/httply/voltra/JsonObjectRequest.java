@@ -82,7 +82,7 @@ public class JsonObjectRequest extends Request<JSONObject> {
      * @param errorListener the listener to receive errors
      */
     public JsonObjectRequest(int method, String url, JSONObject jsonRequest,
-            Response.Listener<JSONObject> listener, Response.ErrorListener errorListener) {
+            VoltraResponse.Listener<JSONObject> listener, VoltraResponse.ErrorListener errorListener) {
         super(Method.toHttpMethod(method), url,
                 jsonRequest != null ? jsonRequest.toString() : null,
                 jsonRequest != null ? HttpHeader.Values.APPLICATION_JSON : null,

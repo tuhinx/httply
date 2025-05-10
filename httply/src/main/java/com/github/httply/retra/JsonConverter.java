@@ -3,14 +3,13 @@ package com.github.httply.retra;
 import com.github.httply.core.HttpHeader;
 import com.github.httply.core.HttpRequest;
 import com.github.httply.core.HttpResponse;
+import com.github.httply.retra.annotations.Converter;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.lang.reflect.Constructor;
 import java.lang.reflect.Type;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;

@@ -95,8 +95,8 @@ public class StringRequest extends Request<String> {
      * @param errorListener the listener to receive errors
      */
     public StringRequest(int method, String url, String requestBody, String contentType,
-            Response.Listener<String> listener,
-            Response.ErrorListener errorListener) {
+            VoltraResponse.Listener<String> listener,
+            VoltraResponse.ErrorListener errorListener) {
         super(Method.toHttpMethod(method), url, requestBody, contentType,
                 response -> listener.onResponse(response),
                 error -> errorListener.onErrorResponse(error));
@@ -137,8 +137,8 @@ public class StringRequest extends Request<String> {
      * @param errorListener the listener to receive errors
      */
     public StringRequest(int method, String url,
-            Response.Listener<String> listener,
-            Response.ErrorListener errorListener) {
+            VoltraResponse.Listener<String> listener,
+            VoltraResponse.ErrorListener errorListener) {
         this(method, url, null, null, listener, errorListener);
     }
 

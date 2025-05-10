@@ -1,4 +1,4 @@
-package com.github.httply.retra;
+package com.github.httply.retra.annotations;
 
 import com.github.httply.core.HttpRequest;
 import com.github.httply.core.HttpResponse;

@@ -66,22 +66,20 @@ public abstract class Request<T> {
 
     /**
      * Callback interface for delivering parsed responses.
+     *
+     * @deprecated Use {@link VoltraResponse.Listener} instead.
      */
-    public interface Listener<T> {
-        /**
-         * Called when a response is received.
-         */
-        void onResponse(T response);
+    @Deprecated
+    public interface Listener<T> extends VoltraResponse.Listener<T> {
     }
 
     /**
      * Callback interface for delivering error responses.
+     *
+     * @deprecated Use {@link VoltraResponse.ErrorListener} instead.
      */
-    public interface ErrorListener {
-        /**
-         * Called when a response error is received.
-         */
-        void onErrorResponse(VoltraError error);
+    @Deprecated
+    public interface ErrorListener extends VoltraResponse.ErrorListener {
     }
 
     private final HttpMethod method;
@@ -95,6 +93,7 @@ public abstract class Request<T> {
     private int retryCount = 0;
     private int maxRetries = 1;
     private Object tag;
+    private boolean shouldCache = true;
 
     /**
      * Creates a new request with the given method.
@@ -224,6 +223,26 @@ public abstract class Request<T> {
     }
 
     /**
+     * Sets whether this request should be cached.
+     *
+     * @param shouldCache true if the request should be cached, false otherwise
+     * @return this request
+     */
+    public Request<T> setShouldCache(boolean shouldCache) {
+        this.shouldCache = shouldCache;
+        return this;
+    }
+
+    /**
+     * Returns whether this request should be cached.
+     *
+     * @return true if the request should be cached, false otherwise
+     */
+    public boolean shouldCache() {
+        return shouldCache;
+    }
+
+    /**
      * Increments the retry count of this request.
      */
     public void incrementRetryCount() {
@@ -264,7 +283,8 @@ public abstract class Request<T> {
 
         HttpRequest.Builder builder = new HttpRequest.Builder()
                 .url(trimmedUrl)
-                .timeout(timeoutMs);
+                .timeout(timeoutMs)
+                .shouldCache(shouldCache);
 
         // Set headers
         for (Map.Entry<String, String> entry : headers.entrySet()) {

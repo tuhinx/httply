@@ -2,6 +2,7 @@ package com.github.httply.retra;
 
 import com.github.httply.core.HttpClient;
 import com.github.httply.core.HttpUrl;
+import com.github.httply.retra.annotations.Converter;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;

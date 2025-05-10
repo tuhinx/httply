@@ -3,7 +3,7 @@ package com.github.httply.voltra;
 /**
  * Response listener interface for compatibility with example usage pattern.
  */
-public class Response {
+public class VoltraResponse {
     /**
      * Listener interface for receiving the response.
      */

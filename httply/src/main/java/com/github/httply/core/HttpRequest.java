@@ -15,6 +15,7 @@ public final class HttpRequest {
     private final HttpHeader headers;
     private final RequestBody body;
     private final int timeoutMs;
+    private final boolean shouldCache;
 
     private HttpRequest(Builder builder) {
         this.method = builder.method;
@@ -22,6 +23,14 @@ public final class HttpRequest {
         this.headers = builder.headers.build();
         this.body = builder.body;
         this.timeoutMs = builder.timeoutMs;
+        this.shouldCache = builder.shouldCache;
+    }
+
+    /**
+     * Returns whether this request should be cached.
+     */
+    public boolean shouldCache() {
+        return shouldCache;
     }
 
     /**
@@ -75,6 +84,7 @@ public final class HttpRequest {
         private final HttpHeader.Builder headers = new HttpHeader.Builder();
         private RequestBody body;
         private int timeoutMs = 30000; // Default timeout: 30 seconds
+        private boolean shouldCache = true; // Default to caching enabled
 
         public Builder() {
         }
@@ -90,6 +100,7 @@ public final class HttpRequest {
             }
             this.body = request.body;
             this.timeoutMs = request.timeoutMs;
+            this.shouldCache = request.shouldCache;
         }
 
         /**
@@ -212,6 +223,17 @@ public final class HttpRequest {
                 throw new IllegalArgumentException("timeout < 0");
             }
             this.timeoutMs = timeoutMs;
+            return this;
+        }
+
+        /**
+         * Sets whether this request should be cached.
+         *
+         * @param shouldCache true if the request should be cached, false otherwise
+         * @return this builder
+         */
+        public Builder shouldCache(boolean shouldCache) {
+            this.shouldCache = shouldCache;
             return this;
         }
 

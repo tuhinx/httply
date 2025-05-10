@@ -1,6 +1,8 @@
 package com.github.httply.retra;
 
 import com.github.httply.core.HttpResponse;
+import com.github.httply.retra.annotations.Call;
+import com.github.httply.retra.annotations.Callback;
 
 import java.io.IOException;
 import java.util.concurrent.Executor;
@@ -55,7 +57,7 @@ final class OkHttpCall<T> implements Call<T> {
             try {
                 HttpResponse rawResponse = serviceMethod.toResponse(args);
                 T body = serviceMethod.parseResponse(rawResponse);
-                callback.onResponse(OkHttpCall.this, Response.success(body, rawResponse));
+                callback.onResponse(OkHttpCall.this, RetraResponse.success(body, rawResponse));
             } catch (Throwable t) {
                 callback.onFailure(OkHttpCall.this, t);
             }

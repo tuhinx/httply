@@ -96,7 +96,11 @@ public class HttpClient {
         } finally {
             // Add connection back to the pool or close it
             boolean canReuse = canReuseConnection(connection);
-            if (canReuse) {
+
+            // Check if the request should be cached
+            boolean shouldCache = request.shouldCache();
+
+            if (canReuse && shouldCache) {
                 connectionPool.put(connection, request.url());
             } else {
                 connection.disconnect();

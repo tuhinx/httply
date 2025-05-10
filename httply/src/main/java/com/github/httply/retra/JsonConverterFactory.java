@@ -1,5 +1,7 @@
 package com.github.httply.retra;
 
+import com.github.httply.retra.annotations.Converter;
+
 /**
  * A {@link Converter.Factory} for JSON.
  */

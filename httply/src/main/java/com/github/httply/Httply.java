@@ -3,7 +3,7 @@ package com.github.httply;
 import android.content.Context;
 
 import com.github.httply.core.HttpClient;
-import com.github.httply.retra.Converter;
+import com.github.httply.retra.annotations.Converter;
 import com.github.httply.retra.JsonConverter;
 import com.github.httply.retra.ServiceFactory;
 import com.github.httply.voltra.RequestQueue;

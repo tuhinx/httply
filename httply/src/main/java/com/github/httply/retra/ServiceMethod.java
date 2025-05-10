@@ -8,6 +8,8 @@ import com.github.httply.core.HttpRequest;
 import com.github.httply.core.HttpResponse;
 import com.github.httply.core.HttpUrl;
 import com.github.httply.retra.annotations.Body;
+import com.github.httply.retra.annotations.Call;
+import com.github.httply.retra.annotations.Converter;
 import com.github.httply.retra.annotations.DELETE;
 import com.github.httply.retra.annotations.GET;
 import com.github.httply.retra.annotations.HEAD;

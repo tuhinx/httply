@@ -2,6 +2,7 @@ package com.github.httply.retra;
 
 import com.github.httply.core.HttpRequest;
 import com.github.httply.core.HttpResponse;
+import com.github.httply.retra.annotations.Converter;
 
 import org.json.JSONArray;
 import org.json.JSONException;

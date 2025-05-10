@@ -8,7 +8,7 @@
   <a href="https://developer.android.com"><img src="https://img.shields.io/badge/Platform-Android-3DDC84?style=flat-square&logo=android&logoColor=white" alt="Platform"></a>
   <a href="https://developer.android.com"><img src="https://img.shields.io/badge/Min%20SDK-24-3DDC84?style=flat-square&logo=android&logoColor=white" alt="Min SDK"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-yellow?style=flat-square" alt="License"></a>
-  <a href="https://jitpack.io/#tuhinx/httply"><img src="https://img.shields.io/badge/Version-1.0.4-blue?style=flat-square" alt="Version"></a>
+  <a href="https://jitpack.io/#tuhinx/httply"><img src="https://img.shields.io/badge/Version-1.0.5-blue?style=flat-square" alt="Version"></a>
   <a href="https://jitpack.io/#tuhinx/httply"><img src="https://img.shields.io/badge/JitPack-available-success?style=flat-square&logo=jitpack&logoColor=white" alt="JitPack"></a>
 </p>
 
@@ -45,6 +45,10 @@
     <tr>
       <td align="center">🔄</td>
       <td><b>Connection Pooling</b> - Reuses connections for better performance</td>
+    </tr>
+    <tr>
+      <td align="center">🧠</td>
+      <td><b>Configurable Caching</b> - Control whether requests should be cached</td>
     </tr>
     <tr>
       <td align="center">⏱️</td>
@@ -103,10 +107,9 @@ Httply is designed with a strong focus on minimizing dependencies in your Androi
   <img src="https://img.shields.io/badge/JitPack-Integration-4c1?style=for-the-badge&logo=jitpack&logoColor=white&labelColor=555555" alt="JitPack Integration" />
 </div>
 
-<table>
+<table width="100%">
 <tr>
-<th width="50%">Gradle</th>
-<th width="50%">Kotlin DSL</th>
+<th width="100%">Gradle</th>
 </tr>
 <tr>
 <td>
@@ -127,11 +130,16 @@ dependencyResolutionManagement {
 
 ```groovy
 dependencies {
-    implementation 'com.github.tuhinx:httply:1.0.4'
+    implementation 'com.github.tuhinx:httply:1.0.5'
 }
 ```
 
 </td>
+</tr>
+<tr>
+<th width="100%">Kotlin DSL</th>
+</tr>
+<tr>
 <td>
 
 **Step 1:** Add JitPack repository to your settings.gradle.kts:
@@ -150,7 +158,7 @@ dependencyResolutionManagement {
 
 ```kotlin
 dependencies {
-    implementation("com.github.tuhinx:httply:1.0.4")
+    implementation("com.github.tuhinx:httply:1.0.5")
 }
 ```
 
@@ -187,32 +195,21 @@ The Retra API provides a clean, annotation-based approach for defining HTTP endp
 
 ```java
 // Define model classes for your API responses
-public class Post {
-    private int userId;
-    private int id;
-    private String title;
-    private String body;
+public class FoodItem {
+    private String name;
+    private String category;
+    private String price;
 
     // Getters
-    public int getUserId() { return userId; }
-    public int getId() { return id; }
-    public String getTitle() { return title; }
-    public String getBody() { return body; }
+    public String getName() { return name; }
+    public String getCategory() { return category; }
+    public String getPrice() { return price; }
 }
 
 // Define your API interface
-public interface ApiService {
-    @GET("users/{user}")
-    Call<JSONObject> getUser(@Path("user") String user);
-
-    @GET("posts")
-    Call<List<Post>> getPosts();
-
-    @GET("posts/{id}")
-    Call<Post> getPost(@Path("id") int id);
-
-    @POST("users/{user}/repos")
-    Call<JSONObject> createRepo(@Path("user") String user, @Body JSONObject body);
+public interface FoodApi {
+    @GET("v1/861a8605-a6e0-408d-8feb-ab303b15f59f")
+    Call<List<FoodItem>> getFoodItems();
 }
 ```
 
@@ -221,48 +218,42 @@ public interface ApiService {
 ```java
 // Create a Retra instance using the builder pattern
 Retra retra = new Retra.Builder()
-        .baseUrl("https://api.example.com/")
-        .addConverterFactory(JsonConverterFactory.create())
+        .baseUrl("https://mocki.io/")
+        .addConverterFactory(GsonConverterFactory.create())
         .build();
 
 // Create an implementation of the API interface
-ApiService api = retra.create(ApiService.class);
-
-// Synchronous requests
-try {
-    // Get a list of posts
-    List<Post> posts = api.getPosts().execute();
-    for (Post post : posts) {
-        System.out.println("Post: " + post.getTitle());
-    }
-
-    // Get a specific post
-    Post post = api.getPost(1).execute();
-    System.out.println("Post #1: " + post.getTitle());
-
-    // Get a user by username
-    JSONObject user = api.getUser("username").execute();
-    System.out.println("User: " + user.getString("name"));
-} catch (Exception e) {
-    e.printStackTrace();
-}
+FoodApi api = retra.create(FoodApi.class);
 
 // Asynchronous requests with callbacks
-Call<List<Post>> call = api.getPosts();
-call.enqueue(new Callback<List<Post>>() {
+Call<List<FoodItem>> call = api.getFoodItems();
+call.enqueue(new Callback<List<FoodItem>>() {
     @Override
-    public void onResponse(Call<List<Post>> call, Response<List<Post>> response) {
-        if (response.isSuccessful()) {
-            List<Post> posts = response.body();
-            for (Post post : posts) {
-                System.out.println("Title: " + post.getTitle());
+    public void onResponse(Call<List<FoodItem>> call, RetraResponse<List<FoodItem>> response) {
+        if (response.isSuccessful() && response.body() != null) {
+            // Process the response on the UI thread
+            for (FoodItem item : response.body()) {
+                HashMap<String, String> map = new HashMap<>();
+                map.put("name", item.getName());
+                map.put("category", item.getCategory());
+                map.put("price", "$" + item.getPrice());
+                foodList.add(map);
             }
+
+            // Update the UI
+            FoodAdapter adapter = new FoodAdapter(context, foodList);
+            listView.setAdapter(adapter);
+            adapter.notifyDataSetChanged();
+        } else {
+            Toast.makeText(context, "Retra: Empty response", Toast.LENGTH_SHORT).show();
         }
     }
 
     @Override
-    public void onFailure(Call<List<Post>> call, Throwable t) {
-        System.err.println("Error: " + t.getMessage());
+    public void onFailure(Call<List<FoodItem>> call, Throwable t) {
+        Toast.makeText(context, "Retra Error: " + t.getMessage(), Toast.LENGTH_LONG).show();
+        // Fallback to Voltra API if Retra fails
+        callVoltraApi();
     }
 });
 ```
@@ -287,7 +278,7 @@ RequestQueue queue = Httply.newRequestQueue(context);
 // GET request for a JSON object (lambda style)
 String url = "https://mocki.io/v1/861a8605-a6e0-408d-8feb-ab303b15f59f";
 JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
-        Request.Method.GET,
+        VoltraResponse.Method.GET,
         url,
         null, // No request body for GET
         response -> {
@@ -308,6 +299,9 @@ JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
         }
 );
 
+// Disable caching for this request (optional)
+jsonObjectRequest.setShouldCache(false);
+
 // Add the request to the queue to execute it
 queue.add(jsonObjectRequest);
 ```
@@ -316,7 +310,7 @@ queue.add(jsonObjectRequest);
 // GET request for a JSON object (anonymous inner class style)
 String url = "https://api.example.com/food";
 JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
-        Request.Method.GET,
+        VoltraResponse.Method.GET,
         url,
         null,
         new Response.Listener<JSONObject>() {
@@ -356,7 +350,7 @@ requestQueue.add(jsonObjectRequest);
 // GET request for a JSON array (lambda style)
 String urlArray = "https://mocki.io/v1/861a8605-a6e0-408d-8feb-ab303b15f59f";
 JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(
-        Request.Method.GET,
+        VoltraResponse.Method.GET,
         urlArray,
         null,
         response -> {
@@ -390,7 +384,7 @@ queue.add(jsonArrayRequest);
 // GET request for a JSON array (anonymous inner class style)
 String url = "https://api.example.com/foods";
 JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(
-        Request.Method.GET,
+        VoltraResponse.Method.GET,
         url,
         null,
         new Response.Listener<JSONArray>() {
@@ -434,54 +428,90 @@ String url = "https://mocki.io/v1/861a8605-a6e0-408d-8feb-ab303b15f59f";
 StringRequest stringRequest = new StringRequest(
         Request.Method.GET,
         url,
-        null, // No request body for GET
-        null, // No content type needed for GET
         response -> {
-            // Handle the string response
-            Log.d("StringRequest", "Raw data: " + response);
-
-            // You can then parse the string response as needed
-            // For example, if it's JSON:
-            try {
-                JSONObject jsonObject = new JSONObject(response);
-                String name = jsonObject.getString("name");
-                String category = jsonObject.getString("category");
-                Log.d("StringRequest", "Parsed: " + name + ", " + category);
-            } catch (JSONException e) {
-                e.printStackTrace();
+            Log.d("TAG", "Raw response: " + response);
+            if (response != null && !response.trim().isEmpty()) {
+                try {
+                    JSONArray jsonArray = new JSONArray(response);
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        JSONObject item = jsonArray.getJSONObject(i);
+                        HashMap<String, String> map = new HashMap<>();
+                        map.put("name", item.getString("name"));
+                        map.put("category", item.getString("category"));
+                        map.put("price", "$" + item.getString("price"));
+                        foodList.add(map);
+                    }
+                    updateAdapter();
+                    Toast.makeText(context, "Loaded " + foodList.size() + " items.", Toast.LENGTH_SHORT).show();
+                } catch (JSONException e) {
+                    Log.e("TAG", "JSON parsing error: " + e.getMessage());
+                    Toast.makeText(context, "Invalid JSON format", Toast.LENGTH_SHORT).show();
+                }
+            } else {
+                Toast.makeText(context, "Empty response", Toast.LENGTH_SHORT).show();
             }
         },
         error -> {
-            // Handle any errors
-            error.printStackTrace();
+            Log.e("TAG", "Voltra Error: " + error.getMessage(), error);
+            Toast.makeText(context, "Voltra Error: " + error.getMessage(), Toast.LENGTH_SHORT).show();
         }
 );
 
-// Add the request to the queue to execute it
+// Disable caching for this request
+stringRequest.setShouldCache(false);
+
+// Add the request to the queue
 queue.add(stringRequest);
 ```
 
 ```java
 // GET request for a string response (anonymous inner class style)
-String url = "https://api.example.com/message";
+String url = "https://mocki.io/v1/861a8605-a6e0-408d-8feb-ab303b15f59f";
 
 StringRequest stringRequest = new StringRequest(
         Request.Method.GET,
         url,
-        new Response.Listener<String>() {
+        new VoltraResponse.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                Toast.makeText(context, "Response: " + response, Toast.LENGTH_SHORT).show();
+                Log.d("TAG", "Raw response: " + response);
+                if (response != null && !response.trim().isEmpty()) {
+                    try {
+                        JSONArray jsonArray = new JSONArray(response);
+                        for (int i = 0; i < jsonArray.length(); i++) {
+                            JSONObject item = jsonArray.getJSONObject(i);
+                            HashMap<String, String> map = new HashMap<>();
+                            map.put("name", item.getString("name"));
+                            map.put("category", item.getString("category"));
+                            map.put("price", "$" + item.getString("price"));
+                            // Add to your data list
+                            foodList.add(map);
+                        }
+                        // Update your UI
+                        updateAdapter();
+                        Toast.makeText(context, "Loaded " + foodList.size() + " items.", Toast.LENGTH_SHORT).show();
+                    } catch (JSONException e) {
+                        Log.e("TAG", "JSON parsing error: " + e.getMessage());
+                        Toast.makeText(context, "Invalid JSON format", Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    Toast.makeText(context, "Empty response", Toast.LENGTH_SHORT).show();
+                }
             }
         },
-        new Response.ErrorListener() {
+        new VoltraResponse.ErrorListener() {
             @Override
             public void onErrorResponse(VoltraError error) {
-                error.printStackTrace();
-                Toast.makeText(context, "Error fetching string", Toast.LENGTH_SHORT).show();
+                Log.e("TAG", "Voltra Error: " + error.getMessage(), error);
+                Toast.makeText(context, "Voltra Error: " + error.getMessage(), Toast.LENGTH_SHORT).show();
             }
         }
 );
+
+// Disable caching for this request
+stringRequest.setShouldCache(false);
+
+// Add the request to the queue
 requestQueue.add(stringRequest);
 ```
 
@@ -493,9 +523,100 @@ requestQueue.add(stringRequest);
   <img src="https://img.shields.io/badge/Configuration-Advanced-orange?style=for-the-badge&labelColor=555555" alt="Advanced Configuration" />
 </div>
 
+### 🚀 Performance Optimization
+
+Httply is designed with performance in mind, offering several features to optimize your network operations:
+
+<table>
+<tr>
+<td align="center">⚡</td>
+<td><b>Efficient Resource Usage</b> - Minimizes memory and CPU consumption</td>
+</tr>
+<tr>
+<td align="center">🔄</td>
+<td><b>Connection Reuse</b> - Reduces connection establishment overhead</td>
+</tr>
+<tr>
+<td align="center">📦</td>
+<td><b>Minimal Footprint</b> - Zero dependencies means smaller APK size</td>
+</tr>
+<tr>
+<td align="center">⏱️</td>
+<td><b>Configurable Timeouts</b> - Fine-tune network behavior for your use case</td>
+</tr>
+</table>
+
+### 🧠 Request Caching
+
+Httply allows you to control whether individual requests should be cached:
+
+```java
+// Create a request
+StringRequest stringRequest = new StringRequest(
+        Request.Method.GET,
+        "https://mocki.io/v1/861a8605-a6e0-408d-8feb-ab303b15f59f",
+        new VoltraResponse.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                // Process the response
+                Log.d("TAG", "Raw response: " + response);
+                // Parse JSON and update UI
+            }
+        },
+        new VoltraResponse.ErrorListener() {
+            @Override
+            public void onErrorResponse(VoltraError error) {
+                // Handle errors
+                Log.e("TAG", "Voltra Error: " + error.getMessage(), error);
+            }
+        }
+);
+
+// Disable caching for this request
+stringRequest.setShouldCache(false);
+
+// Add the request to the queue
+requestQueue.add(stringRequest);
+```
+
+By default, all requests are cached. Setting `setShouldCache(false)` will:
+
+- Prevent the connection from being reused for future requests
+- Force a new connection to be established for this request
+- Useful for requests that need fresh data or when troubleshooting network issues
+
 ### 🔧 Custom HTTP Client
 
-Httply allows you to customize the HTTP client to suit your specific needs:
+<div align="center">
+  <img src="https://img.shields.io/badge/HTTP%20Client-Customizable-4285F4?style=for-the-badge&labelColor=555555" alt="Customizable HTTP Client" />
+</div>
+
+Httply provides a powerful, customizable HTTP client that forms the foundation of both the Retra and Voltra APIs. The client is built on Java's standard `HttpURLConnection` but adds several advanced features:
+
+<table>
+<tr>
+<td align="center">⏱️</td>
+<td><b>Configurable Timeouts</b> - Set custom connect and read timeouts to handle slow networks</td>
+</tr>
+<tr>
+<td align="center">🔄</td>
+<td><b>Connection Pooling</b> - Reuse connections to improve performance and reduce latency</td>
+</tr>
+<tr>
+<td align="center">🧵</td>
+<td><b>Custom Thread Pools</b> - Configure the executor used for asynchronous requests</td>
+</tr>
+<tr>
+<td align="center">🔀</td>
+<td><b>Redirect Control</b> - Enable or disable following HTTP redirects</td>
+</tr>
+<tr>
+<td align="center">🧠</td>
+<td><b>Caching Control</b> - Fine-grained control over which requests should be cached</td>
+</tr>
+</table>
+
+#### Basic Configuration
 
 ```java
 // Create a custom HTTP client with advanced configuration
@@ -506,10 +627,31 @@ HttpClient client = Httply.newHttpClient()
         .build();
 ```
 
-<table>
+#### Advanced Configuration
+
+```java
+// Create a custom connection pool
+ConnectionPool connectionPool = new ConnectionPool(
+        10,                     // Maximum idle connections
+        5, TimeUnit.MINUTES     // Keep-alive duration
+);
+
+// Create a custom executor for async requests
+Executor executor = Executors.newFixedThreadPool(4);
+
+// Create a fully customized HTTP client
+HttpClient client = Httply.newHttpClient()
+        .connectionPool(connectionPool)
+        .executor(executor)
+        .connectTimeout(30, TimeUnit.SECONDS)
+        .readTimeout(60, TimeUnit.SECONDS)
+        .followRedirects(false)  // Disable following redirects
+        .build();
+```
+
+<table width="100%">
 <tr>
-<th width="50%">Use with Retra API</th>
-<th width="50%">Use with Voltra API</th>
+<th width="100%">Use with Retra API</th>
 </tr>
 <tr>
 <td>
@@ -527,6 +669,11 @@ ApiService api = retra.create(ApiService.class);
 ```
 
 </td>
+</tr>
+<tr>
+<th width="100%">Use with Voltra API</th>
+</tr>
+<tr>
 <td>
 
 ```java
@@ -543,6 +690,176 @@ queue.add(new StringRequest(...));
 </td>
 </tr>
 </table>
+
+#### Connection Pooling
+
+Httply's HTTP client includes a built-in connection pooling mechanism that significantly improves performance by reusing existing connections:
+
+<table>
+<tr>
+<td align="center">⚡</td>
+<td><b>Reduced Latency</b> - Eliminates the overhead of establishing new connections</td>
+</tr>
+<tr>
+<td align="center">🔋</td>
+<td><b>Lower Resource Usage</b> - Reduces CPU, memory, and battery consumption</td>
+</tr>
+<tr>
+<td align="center">📈</td>
+<td><b>Improved Throughput</b> - Handles more requests with fewer resources</td>
+</tr>
+<tr>
+<td align="center">⚙️</td>
+<td><b>Configurable</b> - Customize pool size and connection keep-alive duration</td>
+</tr>
+</table>
+
+```java
+// Create a custom connection pool with 20 max idle connections
+// and a 10-minute keep-alive duration
+ConnectionPool connectionPool = new ConnectionPool(
+        20,                      // Maximum idle connections
+        10, TimeUnit.MINUTES     // Keep-alive duration
+);
+
+// Use the custom connection pool with your HTTP client
+HttpClient client = Httply.newHttpClient()
+        .connectionPool(connectionPool)
+        .build();
+```
+
+#### Thread Pool Customization
+
+Httply allows you to customize the thread pool used for asynchronous requests, giving you control over resource usage and concurrency:
+
+<table>
+<tr>
+<td align="center">🧵</td>
+<td><b>Fixed Thread Pool</b> - Limit the number of concurrent requests</td>
+</tr>
+<tr>
+<td align="center">⏱️</td>
+<td><b>Scheduled Executor</b> - Schedule requests to run at specific times</td>
+</tr>
+<tr>
+<td align="center">🔄</td>
+<td><b>Single Thread</b> - Ensure requests are processed sequentially</td>
+</tr>
+<tr>
+<td align="center">🚀</td>
+<td><b>Cached Thread Pool</b> - Dynamically adjust thread count based on load</td>
+</tr>
+</table>
+
+```java
+// Create a fixed thread pool with 4 threads
+Executor fixedPool = Executors.newFixedThreadPool(4);
+
+// Create a single-threaded executor for sequential processing
+Executor singleThread = Executors.newSingleThreadExecutor();
+
+// Create a cached thread pool that adjusts based on load
+Executor cachedPool = Executors.newCachedThreadPool();
+
+// Use a custom executor with your HTTP client
+HttpClient client = Httply.newHttpClient()
+        .executor(fixedPool)  // Choose the appropriate executor for your needs
+        .build();
+```
+
+#### Direct Usage
+
+For advanced use cases, you can also use the HTTP client directly:
+
+```java
+// Create an HTTP client
+HttpClient client = Httply.newHttpClient().build();
+
+// Create a request
+HttpRequest request = new HttpRequest.Builder()
+        .url("https://mocki.io/v1/861a8605-a6e0-408d-8feb-ab303b15f59f")
+        .method(HttpMethod.GET)
+        .shouldCache(true)  // Enable caching (default)
+        .build();
+
+// Execute synchronously
+try {
+    HttpResponse response = client.execute(request);
+    if (response.isSuccessful()) {
+        String body = response.body().string();
+        // Process the response
+    }
+} catch (IOException e) {
+    e.printStackTrace();
+}
+
+// Or execute asynchronously
+client.executeAsync(request, new HttpClient.Callback() {
+    @Override
+    public void onResponse(HttpResponse response) {
+        // Process the response
+    }
+
+    @Override
+    public void onFailure(Exception e) {
+        // Handle the error
+    }
+});
+```
+
+
+
+
+## 🔍 Troubleshooting
+
+<div align="center">
+  <img src="https://img.shields.io/badge/Troubleshooting-Guide-red?style=for-the-badge&labelColor=555555" alt="Troubleshooting Guide" />
+</div>
+
+### Common Issues and Solutions
+
+<table>
+<tr>
+<td align="center">🔌</td>
+<td>
+<b>Connection Timeout</b><br>
+If you're experiencing connection timeouts, try increasing the timeout values:
+<pre>HttpClient client = Httply.newHttpClient()
+        .connectTimeout(30, TimeUnit.SECONDS)
+        .readTimeout(30, TimeUnit.SECONDS)
+        .build();</pre>
+</td>
+</tr>
+<tr>
+<td align="center">🔄</td>
+<td>
+<b>Stale Connections</b><br>
+If you suspect stale connections in the pool, disable caching for critical requests:
+<pre>request.setShouldCache(false);</pre>
+</td>
+</tr>
+<tr>
+<td align="center">🧵</td>
+<td>
+<b>Thread Pool Exhaustion</b><br>
+If you're making many concurrent requests, consider using a larger thread pool:
+<pre>Executor executor = Executors.newFixedThreadPool(8);
+HttpClient client = Httply.newHttpClient()
+        .executor(executor)
+        .build();</pre>
+</td>
+</tr>
+<tr>
+<td align="center">🔒</td>
+<td>
+<b>SSL/TLS Issues</b><br>
+For HTTPS connections, ensure your server's certificates are valid and trusted.
+</td>
+</tr>
+</table>
+
+---
+
 
 ## 📄 License
 
@@ -578,8 +895,6 @@ SOFTWARE.
 ```
 
 </details>
-
----
 
 <div align="center">
 
