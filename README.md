@@ -338,6 +338,9 @@ JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
             }
         }
 );
+
+jsonObjectRequest.setShouldCache(false);
+
 requestQueue.add(jsonObjectRequest);
 ```
 
@@ -376,6 +379,7 @@ JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(
         }
 );
 
+jsonArrayRequest.setShouldCache(false);
 // Add the request to the queue to execute it
 queue.add(jsonArrayRequest);
 ```
@@ -414,6 +418,8 @@ JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(
             }
         }
 );
+jsonArrayRequest.setShouldCache(false);
+
 requestQueue.add(jsonArrayRequest);
 ```
 
