@@ -278,7 +278,7 @@ RequestQueue queue = Httply.newRequestQueue(context);
 // GET request for a JSON object (lambda style)
 String url = "https://mocki.io/v1/861a8605-a6e0-408d-8feb-ab303b15f59f";
 JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
-        VoltraResponse.Method.GET,
+        Request.Method.GET,
         url,
         null, // No request body for GET
         response -> {
@@ -310,10 +310,10 @@ queue.add(jsonObjectRequest);
 // GET request for a JSON object (anonymous inner class style)
 String url = "https://api.example.com/food";
 JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
-        VoltraResponse.Method.GET,
+        Request.Method.GET,
         url,
         null,
-        new Response.Listener<JSONObject>() {
+        new VoltraResponse.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 try {
@@ -330,7 +330,7 @@ JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
                 }
             }
         },
-        new Response.ErrorListener() {
+        new VoltraResponse.ErrorListener() {
             @Override
             public void onErrorResponse(VoltraError error) {
                 error.printStackTrace();
@@ -350,7 +350,7 @@ requestQueue.add(jsonObjectRequest);
 // GET request for a JSON array (lambda style)
 String urlArray = "https://mocki.io/v1/861a8605-a6e0-408d-8feb-ab303b15f59f";
 JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(
-        VoltraResponse.Method.GET,
+        Request.Method.GET,
         urlArray,
         null,
         response -> {
@@ -384,10 +384,10 @@ queue.add(jsonArrayRequest);
 // GET request for a JSON array (anonymous inner class style)
 String url = "https://api.example.com/foods";
 JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(
-        VoltraResponse.Method.GET,
+        Request.Method.GET,
         url,
         null,
-        new Response.Listener<JSONArray>() {
+        new VoltraResponse.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
                 try {
@@ -406,7 +406,7 @@ JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(
                 }
             }
         },
-        new Response.ErrorListener() {
+        new VoltraResponse.ErrorListener() {
             @Override
             public void onErrorResponse(VoltraError error) {
                 error.printStackTrace();
@@ -441,7 +441,6 @@ StringRequest stringRequest = new StringRequest(
                         map.put("price", "$" + item.getString("price"));
                         foodList.add(map);
                     }
-                    updateAdapter();
                     Toast.makeText(context, "Loaded " + foodList.size() + " items.", Toast.LENGTH_SHORT).show();
                 } catch (JSONException e) {
                     Log.e("TAG", "JSON parsing error: " + e.getMessage());
@@ -487,8 +486,6 @@ StringRequest stringRequest = new StringRequest(
                             // Add to your data list
                             foodList.add(map);
                         }
-                        // Update your UI
-                        updateAdapter();
                         Toast.makeText(context, "Loaded " + foodList.size() + " items.", Toast.LENGTH_SHORT).show();
                     } catch (JSONException e) {
                         Log.e("TAG", "JSON parsing error: " + e.getMessage());
