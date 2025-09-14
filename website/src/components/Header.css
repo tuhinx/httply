@@ -1,0 +1,154 @@
+.header {
+  background-color: #161b22;
+  border-bottom: 1px solid #30363d;
+  padding: 0;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  width: 100%;
+  height: 60px;
+  transition: all 0.3s ease;
+}
+
+/* Light theme */
+[data-theme="light"] .header {
+  background-color: #ffffff;
+  border-bottom: 1px solid #d0d7de;
+}
+
+.header-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1.5rem;
+  max-width: none;
+  height: 100%;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+}
+
+.mobile-menu-btn {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  background: transparent;
+  border: 1px solid #30363d;
+  border-radius: 6px;
+  color: #e6edf3;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-right: 1rem;
+}
+
+.mobile-menu-btn:hover {
+  background: #21262d;
+  border-color: #58a6ff;
+}
+
+[data-theme="light"] .mobile-menu-btn {
+  border: 1px solid #d0d7de;
+  color: #24292f;
+}
+
+[data-theme="light"] .mobile-menu-btn:hover {
+  background: #f6f8fa;
+  border-color: #0969da;
+}
+
+.logo {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #e6edf3;
+  text-decoration: none;
+  margin-right: 2rem;
+  margin-left: 1rem;
+  transition: color 0.3s ease;
+}
+
+.logo:hover {
+  text-decoration: none;
+}
+
+[data-theme="light"] .logo {
+  color: #24292f;
+}
+
+[data-theme="light"] .logo:hover {
+  text-decoration: none;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Search button removed */
+
+.theme-btn, .github-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  background: transparent;
+  border: 1px solid #30363d;
+  border-radius: 6px;
+  color: #8b949e;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-decoration: none;
+}
+
+.theme-btn:hover, .github-btn:hover {
+  background: #21262d;
+  border-color: #8b949e;
+  color: #e6edf3;
+}
+
+/* Light theme buttons */
+[data-theme="light"] .theme-btn, 
+[data-theme="light"] .github-btn {
+  border: 1px solid #d0d7de;
+  color: #656d76;
+}
+
+[data-theme="light"] .theme-btn:hover, 
+[data-theme="light"] .github-btn:hover {
+  background: #f6f8fa;
+  border-color: #656d76;
+  color: #24292f;
+}
+
+/* Responsive design */
+@media (max-width: 1024px) {
+  .mobile-menu-btn {
+    display: flex;
+  }
+}
+
+@media (max-width: 768px) {
+  .header-container {
+    padding: 0 1rem;
+  }
+  
+  .logo {
+    font-size: 1.1rem;
+    margin-right: 1rem;
+    margin-left: 0;
+  }
+  
+  .header-right {
+    gap: 0.25rem;
+  }
+  
+  .theme-btn, .github-btn {
+    width: 1.75rem;
+    height: 1.75rem;
+  }
+}
