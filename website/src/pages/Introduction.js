@@ -129,14 +129,25 @@ queue.add(request);`}</pre>
 
         <h2>Key Features</h2>
         <ul className="features-list">
-          <li><strong>Zero External Dependencies:</strong> Built entirely with Java standard libraries</li>
-          <li><strong>Dual API Design:</strong> Choose between annotation-based (Retra) or request-based (Voltra) approaches</li>
-          <li><strong>Connection Pooling:</strong> Efficient HTTP connection management and reuse</li>
-          <li><strong>Thread Pool Customization:</strong> Configurable thread pools for optimal performance</li>
-          <li><strong>Full Java & Kotlin Support:</strong> Works seamlessly with both languages</li>
-          <li><strong>Configurable Caching:</strong> Control whether requests should be cached</li>
-          <li><strong>Configurable Timeouts:</strong> Set connect and read timeouts</li>
-          <li><strong>JSON Support:</strong> Built-in JSON parsing with standard org.json library</li>
+          <li><strong>🔌 Zero External Dependencies:</strong> Built entirely with Java standard libraries</li>
+          <li><strong>🧩 Dual API Styles:</strong> Choose between Retra (annotation-based) or Voltra (queue-based) approaches</li>
+          <li><strong>☕ Full Java and Kotlin Support:</strong> Works seamlessly with both languages</li>
+          <li><strong>🪶 Lightweight:</strong> Minimal footprint in your app</li>
+          <li><strong>🔄 Connection Pooling:</strong> Reuses connections for better performance</li>
+          <li><strong>🧠 Configurable Caching:</strong> Control whether requests should be cached</li>
+          <li><strong>⏱️ Configurable Timeouts:</strong> Set connect and read timeouts</li>
+          <li><strong>🧵 Customizable Thread Pools:</strong> Control the number of threads used for requests</li>
+          <li><strong>📋 JSON Support:</strong> Built-in JSON parsing with standard org.json library</li>
+        </ul>
+
+        <h2>Zero External Dependencies</h2>
+        <p>
+          Httply is designed with a strong focus on minimizing dependencies in your Android projects:
+        </p>
+        <ul className="features-list">
+          <li><strong>🔒 Security & Reliability:</strong> No third-party libraries reduces risk of dependency conflicts and security vulnerabilities</li>
+          <li><strong>⚡ Performance Benefits:</strong> Smaller APK size, faster build times, and reduced method count</li>
+          <li><strong>🧰 Implementation:</strong> Built on Java standard libraries with clean architecture</li>
         </ul>
 
         <h2>Quick Start</h2>

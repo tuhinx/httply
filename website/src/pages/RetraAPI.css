@@ -1,0 +1,365 @@
+/* Retra API Page Styles */
+.retra-api-page {
+  padding: 2rem 0;
+  min-height: 100vh;
+}
+
+.page-header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.page-header h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  color: #0d1117;
+  transition: color 0.3s ease;
+}
+
+.page-header p {
+  font-size: 1.2rem;
+  color: #656d76;
+  margin: 0;
+  transition: color 0.3s ease;
+}
+
+.content-section {
+  max-width: 100%;
+}
+
+.content-section h2 {
+  font-size: 1.8rem;
+  font-weight: 600;
+  margin: 2.5rem 0 1rem 0;
+  color: #0d1117;
+  border-bottom: 2px solid #d1d9e0;
+  padding-bottom: 0.5rem;
+  transition: color 0.3s ease;
+}
+
+.content-section h3 {
+  font-size: 1.4rem;
+  font-weight: 600;
+  margin: 2rem 0 1rem 0;
+  color: #0d1117;
+  transition: color 0.3s ease;
+}
+
+.content-section p {
+  font-size: 1rem;
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+  color: #656d76;
+  transition: color 0.3s ease;
+}
+
+.step {
+  margin-bottom: 2.5rem;
+  padding: 1.5rem;
+  background: #f6f8fa;
+  border-radius: 8px;
+  border-left: 4px solid #0969da;
+  transition: background-color 0.3s ease;
+}
+
+.step h3 {
+  margin-top: 0;
+  color: #0969da;
+  font-size: 1.3rem;
+  transition: color 0.3s ease;
+}
+
+.annotation-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin: 2rem 0;
+}
+
+.annotation-item {
+  background: #f6f8fa;
+  padding: 1.5rem;
+  border-radius: 8px;
+  border: 1px solid #d1d9e0;
+  transition: all 0.3s ease;
+}
+
+.annotation-item:hover {
+  border-color: #0969da;
+  box-shadow: 0 2px 8px rgba(9, 105, 218, 0.1);
+}
+
+.annotation-item h3 {
+  margin-top: 0;
+  color: #0969da;
+  font-size: 1.2rem;
+  transition: color 0.3s ease;
+}
+
+.annotation-item p {
+  margin-bottom: 1rem;
+  color: #656d76;
+  transition: color 0.3s ease;
+}
+
+.parameter-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin: 2rem 0;
+}
+
+.parameter-item {
+  background: #f6f8fa;
+  padding: 1.5rem;
+  border-radius: 8px;
+  border: 1px solid #d1d9e0;
+  transition: all 0.3s ease;
+}
+
+.parameter-item:hover {
+  border-color: #0969da;
+  box-shadow: 0 2px 8px rgba(9, 105, 218, 0.1);
+}
+
+.parameter-item h3 {
+  margin-top: 0;
+  color: #0969da;
+  font-size: 1.2rem;
+  transition: color 0.3s ease;
+}
+
+.parameter-item p {
+  margin-bottom: 1rem;
+  color: #656d76;
+  transition: color 0.3s ease;
+}
+
+.code-example {
+  position: relative;
+  background: #0d1117;
+  border: 1px solid #30363d;
+  border-radius: 8px;
+  margin: 1rem 0;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.code-example pre {
+  margin: 0;
+  padding: 16px;
+  background: transparent;
+  color: #e6edf3;
+  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+  font-size: 14px;
+  line-height: 1.5;
+  white-space: pre;
+  overflow-x: auto;
+  transition: color 0.3s ease;
+}
+
+/* Light Theme Styles */
+[data-theme="light"] .page-header h1 {
+  color: #0d1117;
+}
+
+[data-theme="light"] .page-header p {
+  color: #656d76;
+}
+
+[data-theme="light"] .content-section h2 {
+  color: #0d1117;
+  border-bottom-color: #d1d9e0;
+}
+
+[data-theme="light"] .content-section h3 {
+  color: #0d1117;
+}
+
+[data-theme="light"] .content-section p {
+  color: #656d76;
+}
+
+[data-theme="light"] .step {
+  background: #f6f8fa;
+}
+
+[data-theme="light"] .step h3 {
+  color: #0969da;
+}
+
+[data-theme="light"] .annotation-item {
+  background: #f6f8fa;
+  border-color: #d1d9e0;
+}
+
+[data-theme="light"] .annotation-item:hover {
+  border-color: #0969da;
+  box-shadow: 0 2px 8px rgba(9, 105, 218, 0.1);
+}
+
+[data-theme="light"] .annotation-item h3 {
+  color: #0969da;
+}
+
+[data-theme="light"] .annotation-item p {
+  color: #656d76;
+}
+
+[data-theme="light"] .parameter-item {
+  background: #f6f8fa;
+  border-color: #d1d9e0;
+}
+
+[data-theme="light"] .parameter-item:hover {
+  border-color: #0969da;
+  box-shadow: 0 2px 8px rgba(9, 105, 218, 0.1);
+}
+
+[data-theme="light"] .parameter-item h3 {
+  color: #0969da;
+}
+
+[data-theme="light"] .parameter-item p {
+  color: #656d76;
+}
+
+[data-theme="light"] .code-example {
+  background: #0d1117;
+  border-color: #30363d;
+}
+
+[data-theme="light"] .code-example pre {
+  color: #e6edf3;
+}
+
+/* Dark Theme Styles */
+[data-theme="dark"] .page-header h1 {
+  color: #ffffff;
+}
+
+[data-theme="dark"] .page-header p {
+  color: #8b949e;
+}
+
+[data-theme="dark"] .content-section h2 {
+  color: #ffffff;
+  border-bottom-color: #30363d;
+}
+
+[data-theme="dark"] .content-section h3 {
+  color: #ffffff;
+}
+
+[data-theme="dark"] .content-section p {
+  color: #8b949e;
+}
+
+[data-theme="dark"] .step {
+  background: #161b22;
+}
+
+[data-theme="dark"] .step h3 {
+  color: #58a6ff;
+}
+
+[data-theme="dark"] .annotation-item {
+  background: #161b22;
+  border-color: #30363d;
+}
+
+[data-theme="dark"] .annotation-item:hover {
+  border-color: #58a6ff;
+  box-shadow: 0 2px 8px rgba(88, 166, 255, 0.1);
+}
+
+[data-theme="dark"] .annotation-item h3 {
+  color: #58a6ff;
+}
+
+[data-theme="dark"] .annotation-item p {
+  color: #8b949e;
+}
+
+[data-theme="dark"] .parameter-item {
+  background: #161b22;
+  border-color: #30363d;
+}
+
+[data-theme="dark"] .parameter-item:hover {
+  border-color: #58a6ff;
+  box-shadow: 0 2px 8px rgba(88, 166, 255, 0.1);
+}
+
+[data-theme="dark"] .parameter-item h3 {
+  color: #58a6ff;
+}
+
+[data-theme="dark"] .parameter-item p {
+  color: #8b949e;
+}
+
+[data-theme="dark"] .code-example {
+  background: #0d1117;
+  border-color: #30363d;
+}
+
+[data-theme="dark"] .code-example pre {
+  color: #e6edf3;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .page-header h1 {
+    font-size: 2rem;
+  }
+  
+  .page-header p {
+    font-size: 1rem;
+  }
+  
+  .content-section h2 {
+    font-size: 1.5rem;
+  }
+  
+  .content-section h3 {
+    font-size: 1.2rem;
+  }
+  
+  .annotation-grid {
+    flex-direction: column;
+  }
+  
+  .parameter-grid {
+    flex-direction: column;
+  }
+  
+  .step {
+    padding: 1rem;
+  }
+  
+  .annotation-item,
+  .parameter-item {
+    padding: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .page-header h1 {
+    font-size: 1.8rem;
+  }
+  
+  .content-section h2 {
+    font-size: 1.3rem;
+  }
+  
+  .content-section h3 {
+    font-size: 1.1rem;
+  }
+  
+  .code-example pre {
+    font-size: 12px;
+    padding: 12px;
+  }
+}

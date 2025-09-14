@@ -62,20 +62,43 @@ const Download = () => {
           </div>
         </div>
 
-        <h2>Maven Setup</h2>
-        <p>If you're using Maven, add Httply to your pom.xml:</p>
+        <h2>Kotlin DSL Setup</h2>
+        <p>If you're using Kotlin DSL, add Httply to your build.gradle.kts:</p>
 
-        <div className="code-example">
-          <CopyButton text={`<dependency>
-    <groupId>com.github.tuhinx</groupId>
-    <artifactId>httply</artifactId>
-    <version>1.0.5</version>
-</dependency>`} />
-          <pre>{`<dependency>
-    <groupId>com.github.tuhinx</groupId>
-    <artifactId>httply</artifactId>
-    <version>1.0.5</version>
-</dependency>`}</pre>
+        <div className="setup-steps">
+          <div className="step">
+            <h3>Step 1: Add JitPack Repository (Kotlin DSL)</h3>
+            <p>Add JitPack to your settings.gradle.kts:</p>
+            <div className="code-example">
+              <CopyButton text={`dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        mavenCentral()
+        maven { url = uri("https://jitpack.io") }
+    }
+}`} />
+              <pre>{`dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        mavenCentral()
+        maven { url = uri("https://jitpack.io") }
+    }
+}`}</pre>
+            </div>
+          </div>
+
+          <div className="step">
+            <h3>Step 2: Add Httply Dependency (Kotlin DSL)</h3>
+            <p>Add Httply to your app-level build.gradle.kts:</p>
+            <div className="code-example">
+              <CopyButton text={`dependencies {
+    implementation("com.github.tuhinx:httply:1.0.5")
+}`} />
+              <pre>{`dependencies {
+    implementation("com.github.tuhinx:httply:1.0.5")
+}`}</pre>
+            </div>
+          </div>
         </div>
 
         <h2>Version Information</h2>

@@ -7,6 +7,8 @@ import Declarations from './pages/Declarations';
 import Configuration from './pages/Configuration';
 import Download from './pages/Download';
 import Contributing from './pages/Contributing';
+import RetraAPI from './pages/RetraAPI';
+import VoltraAPI from './pages/VoltraAPI';
 import './App.css';
 
 function App() {
@@ -31,6 +33,8 @@ function App() {
             <Routes>
               <Route path="/" element={<Introduction />} />
               <Route path="/introduction" element={<Introduction />} />
+              <Route path="/retra-api" element={<RetraAPI />} />
+              <Route path="/voltra-api" element={<VoltraAPI />} />
               <Route path="/declarations" element={<Declarations />} />
               <Route path="/configuration" element={<Configuration />} />
               <Route path="/download" element={<Download />} />
