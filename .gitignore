@@ -41,3 +41,16 @@ fabric.properties
 
 # VS Code
 .vscode/
+
+# Large files and archives
+*.rar
+*.zip
+*.7z
+*.tar.gz
+*.tar.bz2
+*.dmg
+*.iso
+*.img
+
+# Files larger than 50MB
+*.large
